@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Award, Briefcase, ChevronLeft, GraduationCap, MapPin, Sparkles, AlertCircle, CheckCircle2, Loader2, Filter } from 'lucide-react';
+import { Award, Briefcase, ChevronLeft, GraduationCap, MapPin, Sparkles, CheckCircle2, Loader2, Filter } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const { userProfile, currentView, setCurrentView, selectedProfession, setSelectedProfession, resetApp } = useAppContext();
