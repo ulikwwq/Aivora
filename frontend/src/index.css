@@ -4,45 +4,49 @@
   /* Minimalist Premium Palette */
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   
-  /* Core brand colors */
-  --primary: #4f46e5;
-  --primary-glow: rgba(79, 70, 229, 0.4);
-  --secondary: #10b981;
-  --secondary-glow: rgba(16, 185, 129, 0.3);
+  /* Core brand colors - Vibrant & Modern */
+  --primary: #6366f1; /* Indigo */
+  --primary-glow: rgba(99, 102, 241, 0.4);
+  --secondary: #ec4899; /* Pink */
+  --secondary-glow: rgba(236, 72, 153, 0.3);
+  --accent: #14b8a6; /* Teal */
   
   /* Background / Surfaces */
-  --bg-color: #f8fafc;
+  --bg-color: #fcfcfd;
   --surface-color: rgba(255, 255, 255, 0.85);
-  --surface-alt: #f1f5f9;
+  --surface-alt: #ffffff;
   
   /* Text colors */
   --text-main: #0f172a;
   --text-muted: #64748b;
   
   /* Borders */
-  --border-light: rgba(255, 255, 255, 0.5);
-  --border-dark: rgba(0, 0, 0, 0.05);
+  --border-light: rgba(255, 255, 255, 0.8);
+  --border-dark: rgba(0, 0, 0, 0.06);
+  --border-color: rgba(0, 0, 0, 0.08); /* Added */
   
   /* Effects */
-  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-  --shadow-hover: 0 12px 40px 0 rgba(79, 70, 229, 0.15);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.03); /* Added */
+  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  --shadow-hover: 0 20px 40px 0 rgba(99, 102, 241, 0.15);
   
   /* Transitions */
-  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-snappy: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-snappy: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-color: #0f172a;
-    --surface-color: rgba(30, 41, 59, 0.75);
-    --surface-alt: #334155;
+    --bg-color: #0b1120;
+    --surface-color: rgba(30, 41, 59, 0.65);
+    --surface-alt: #1e293b;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --border-light: rgba(255, 255, 255, 0.1);
+    --border-light: rgba(255, 255, 255, 0.08);
     --border-dark: rgba(0, 0, 0, 0.4);
+    --border-color: rgba(255, 255, 255, 0.1);
     --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    --primary-glow: rgba(79, 70, 229, 0.6);
+    --primary-glow: rgba(99, 102, 241, 0.6);
   }
 }
 
@@ -79,15 +83,17 @@ body {
   z-index: -1;
   pointer-events: none;
   background: 
-    radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.12), transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1), transparent 40%);
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.05), transparent 60%);
   filter: blur(40px);
-  animation: bgPulse 15s ease-in-out infinite alternate;
+  animation: bgPulse 20s ease-in-out infinite alternate;
 }
 
 @keyframes bgPulse {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.05) translate(2%, 2%); }
+  100% { transform: scale(1.1) translate(-2%, -2%); }
 }
 
 /* Layout */
@@ -98,57 +104,71 @@ body {
   padding: 0 1.5rem;
 }
 
-/* Glass Surface Architecture */
+/* Premium Glass Surface Architecture */
 .glass {
   background: var(--surface-color);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-soft);
-  border-radius: 1.25rem;
-  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  border-radius: 1.5rem;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
 .glass-hover:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
-  border-color: rgba(79, 70, 229, 0.3);
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
-/* Minimalist Clean Buttons */
+/* Beautiful Interactive Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.75rem;
+  gap: 0.6rem;
+  padding: 0.9rem 2rem;
   font-size: 1.05rem;
   font-weight: 600;
-  border-radius: 1rem;
+  border-radius: 1.25rem;
   border: none;
   cursor: pointer;
   transition: all var(--transition-snappy);
   font-family: var(--font-sans);
   outline: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary {
-  background-color: var(--text-main);
-  color: var(--bg-color);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary), #818cf8);
+  color: #ffffff;
+  box-shadow: 0 8px 24px var(--primary-glow);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   .btn-primary {
-    background-color: var(--primary);
-    color: white;
-    box-shadow: 0 4px 15px var(--primary-glow);
+    background: linear-gradient(135deg, var(--primary), #4f46e5);
   }
 }
 
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity var(--transition-snappy);
+}
+
 .btn-primary:hover:not(:disabled) {
-  transform: scale(1.02);
-  opacity: 0.9;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
 }
 
 .btn-primary:active:not(:disabled) {
@@ -156,9 +176,11 @@ body {
 }
 
 .btn-primary:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  background: var(--text-muted);
+  box-shadow: none;
 }
 
 .btn-outline {
@@ -170,52 +192,51 @@ body {
 }
 
 .btn-outline:hover {
-  border-color: var(--text-main);
-  background: rgba(0, 0, 0, 0.02);
-}
-
-@media (prefers-color-scheme: dark) {
-  .btn-outline:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--border-light);
-  }
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.1);
 }
 
 /* Animations */
 @keyframes fadeInSlideUp {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeInSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Inputs */
+/* Inputs and Selects */
 .input, .select {
   width: 100%;
-  padding: 1rem 1.25rem;
+  padding: 1.1rem 1.4rem;
   font-size: 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--border-dark);
+  border-radius: 1.25rem;
+  border: 2px solid transparent;
   background-color: var(--surface-color);
   color: var(--text-main);
   transition: all var(--transition-snappy);
   font-family: inherit;
   font-weight: 500;
   backdrop-filter: blur(10px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), var(--shadow-sm);
 }
 
 .input:focus, .select:focus {
   outline: none;
   border-color: var(--primary);
+  background-color: var(--surface-alt);
   box-shadow: 0 0 0 4px var(--primary-glow);
-  background-color: var(--bg-color);
+  transform: translateY(-2px);
 }
 
+/* Typing indicator for AI Chat */
 .dot-typing { 
-  width: 6px; 
-  height: 6px; 
+  width: 8px; 
+  height: 8px; 
   border-radius: 50%; 
   background-color: var(--primary); 
   animation: dot-typing 1.4s infinite ease-in-out both; 

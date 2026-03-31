@@ -56,31 +56,65 @@ app.post('/api/analyze', (req, res) => {
     recommendedProfessions = PROFESSIONS.sort(() => 0.5 - Math.random()).slice(0, 5);
   }
 
-  // 3. Process Universities and Check Grant Eligibility
-  // Simple heuristic: If user has GPA 'Отличник' and IELTS >= 6.5, they get grant almost everywhere.
-  
-  const gpaScore = gpa === 'Отличник (4.5 - 5.0)' ? 3 : (gpa === 'Хорошист (3.5 - 4.4)' ? 2 : 1);
-  const ieltsScore = ['7.5+', '6.5 - 7.0'].includes(ielts) ? 3 : (['5.5 - 6.0'].includes(ielts) ? 2 : 1);
-  const hasStrongExtras = extracurriculars && extracurriculars.length > 0 && !extracurriculars.includes('Нет');
-
+  // 3. Process Universities and Calculate Probabilities
   const processedUniversities = UNIVERSITIES.map(uni => {
-    let eligibleForGrant = false;
+    // Determine user's base numeric representation
+    let userBaseGpa = 0;
+    if (gpa === 'Отличник (4.5 - 5.0)') userBaseGpa = 4.8;
+    else if (gpa === 'Хорошист (3.5 - 4.4)') userBaseGpa = 4.0;
+    else if (gpa === 'Средний (2.5 - 3.4)') userBaseGpa = 3.0;
+
+    let uniBaseGpa = 0;
+    if (uni.minGpa === 'Отличник (4.5 - 5.0)') uniBaseGpa = 4.5;
+    else if (uni.minGpa === 'Хорошист (3.5 - 4.4)') uniBaseGpa = 3.5;
+    else uniBaseGpa = 2.5;
+
+    // Calculate base admission probability based on GPA delta
+    let admissionProbability = 50 + (userBaseGpa - uniBaseGpa) * 20;
+
+    // Extracurriculars boost probability
+    let extraBonus = 0;
+    if (extracurriculars && !extracurriculars.includes('Нет')) {
+      const valuableExtras = extracurriculars.filter((e: string) => ['Олимпиады', 'Научные проекты'].includes(e));
+      const standardExtras = extracurriculars.filter((e: string) => ['Волонтерство', 'Спорт', 'Школьное самоуправление'].includes(e));
+      extraBonus = (valuableExtras.length * 10) + (standardExtras.length * 5);
+    }
     
-    // Evaluate based on Uni requirements
-    let uniReqGpaScore = uni.minGpa === 'Отличник (4.5 - 5.0)' ? 3 : (uni.minGpa === 'Хорошист (3.5 - 4.4)' ? 2 : 1);
-    let uniReqIeltsScore = ['6.5 - 7.0'].includes(uni.minIelts) ? 3 : (['5.5 - 6.0'].includes(uni.minIelts) ? 2 : 1);
+    admissionProbability += extraBonus;
 
-    if (gpaScore >= uniReqGpaScore && ieltsScore >= uniReqIeltsScore) {
-      eligibleForGrant = true;
+    // Cap admission between 5 and 99%
+    admissionProbability = Math.max(5, Math.min(99, Math.round(admissionProbability)));
+
+    // For grant probability, IELTS and GPA are critical.
+    let userIeltsScore = 0;
+    if (ielts === '7.5+') userIeltsScore = 8;
+    else if (ielts === '6.5 - 7.0') userIeltsScore = 6.5;
+    else if (ielts === '5.5 - 6.0') userIeltsScore = 5.5;
+    else if (ielts === '4.0 - 5.0') userIeltsScore = 4.5;
+    
+    let uniReqIelts = 0;
+    if (uni.minIelts === '6.5 - 7.0') uniReqIelts = 6.5;
+    else if (uni.minIelts === '5.5 - 6.0') uniReqIelts = 5.5;
+
+    let grantProbability = 0;
+    if (uni.hasGrant) {
+      let gpaMatchGrant = (userBaseGpa - uniBaseGpa) * 25; // needs higher gpa for grant
+      let ieltsMatchGrant = uniReqIelts > 0 ? (userIeltsScore - uniReqIelts) * 20 : 10;
+      grantProbability = 30 + gpaMatchGrant + ieltsMatchGrant + extraBonus;
+      grantProbability = Math.max(1, Math.min(99, Math.round(grantProbability)));
+      
+      // If they clearly don't meet minimums
+      if (userBaseGpa <= uniBaseGpa || (uniReqIelts > 0 && userIeltsScore < uniReqIelts - 0.5)) {
+        grantProbability = Math.min(grantProbability, 25);
+      }
     }
 
-    // Boost chances if they have great extracurriculars
-    if (hasStrongExtras && gpaScore >= 2 && uniReqGpaScore <= 2) {
-      eligibleForGrant = true;
-    }
+    let eligibleForGrant = grantProbability >= 40;
 
     return {
       ...uni,
+      admissionProbability,
+      grantProbability,
       eligibleForGrant
     };
   });

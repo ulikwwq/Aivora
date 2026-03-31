@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
                   <div>
                     <h4 style={{ margin: 0, marginBottom: '0.25rem', fontSize: '1.1rem' }}>Неделя {week}</h4>
                     <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>
-                      {selectedProfession.plan[`week${week}` as keyof typeof selectedProfession.plan]} // 
+                      {selectedProfession.plan[`week${week}` as keyof typeof selectedProfession.plan]}
                     </p>
                   </div>
                 </div>
@@ -168,19 +168,36 @@ const Dashboard: React.FC = () => {
                   </p>
                   <p style={{ margin: 0, fontSize: '0.9rem', marginBottom: '1rem' }}>{uni.description}</p>
                   
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
                     {uni.tags.map((tag: string, i: number) => (
-                      <span key={i} style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'var(--bg-color)', border: '1px solid var(--border-dark)', borderRadius: '1rem', color: 'var(--text-main)' }}>
+                      <span key={i} style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'var(--bg-color)', border: '1px solid var(--border-dark)', borderRadius: '1rem', color: 'var(--text-main)', fontWeight: 500 }}>
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  {!uni.eligibleForGrant && (
-                    <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: '#ef4444' }}>
-                      <AlertCircle size={16} /> GPA или IELTS ниже требуемого для гранта в этом ВУЗе.
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', background: 'rgba(0,0,0,0.02)', padding: '1rem', borderRadius: '0.8rem', border: '1px solid var(--border-light)' }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                        <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Поступление</span>
+                        <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{uni.admissionProbability}%</span>
+                      </div>
+                      <div style={{ width: '100%', height: '8px', background: 'var(--border-dark)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{ width: `${uni.admissionProbability}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary), #818cf8)', borderRadius: '4px', transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)' }}></div>
+                      </div>
                     </div>
-                  )}
+                    {uni.hasGrant && (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                          <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Получение гранта</span>
+                          <span style={{ fontWeight: 700, color: 'var(--secondary)' }}>{uni.grantProbability}%</span>
+                        </div>
+                        <div style={{ width: '100%', height: '8px', background: 'var(--border-dark)', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ width: `${uni.grantProbability}%`, height: '100%', background: 'linear-gradient(90deg, var(--secondary), #34d399)', borderRadius: '4px', transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)' }}></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )) : (
                 <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
