@@ -1,5 +1,4 @@
 backend/target/
-backend/src/main/resources/application.yaml
 frontend/node_modules/
 frontend/dist/
 *.class
