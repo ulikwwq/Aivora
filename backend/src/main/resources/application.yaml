@@ -20,6 +20,6 @@ jwt:
   secret: aivora-super-secret-key-must-be-at-least-32-characters-long
   expiration: 86400000
 
-openai:
-  api-key: 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
-  model: gpt-4o-mini
+groq:
+  api-key: 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
+  model: llama-3.3-70b-versatile
