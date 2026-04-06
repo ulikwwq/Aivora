@@ -79,6 +79,7 @@ export default function Chat() {
             <span>{name}</span>
           </div>
           <button className="mobile-menu-btn" onClick={handleReset}>+ Новый диалог</button>
+          <button className="mobile-menu-btn" onClick={() => navigate('/recommendations')}>🎓 Университеты</button>
           <button className="mobile-menu-btn logout" onClick={handleLogout}>Выйти</button>
         </div>
       )}
@@ -93,6 +94,9 @@ export default function Chat() {
           <span className="user-name">{name}</span>
         </div>
         <button className="btn-new-chat" onClick={handleReset}>+ Новый диалог</button>
+        <button className="btn-new-chat" style={{ marginTop: '8px' }} onClick={() => navigate('/recommendations')}>
+          🎓 Университеты
+        </button>
         <div className="sidebar-footer">
           <button className="btn-logout" onClick={handleLogout}>Выйти</button>
         </div>

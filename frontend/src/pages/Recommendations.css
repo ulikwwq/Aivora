@@ -1,0 +1,165 @@
+.rec-container {
+  min-height: 100vh;
+  background: #0f0f13;
+  color: #fff;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #2a2a3a;
+  background: #1a1a24;
+}
+
+.back-btn {
+  background: transparent;
+  color: #6c63ff;
+  border: 1px solid #6c63ff44;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.rec-logo { font-size: 20px; font-weight: 800; }
+.logo-text { color: #fff; }
+.logo-dot { color: #6c63ff; }
+
+.rec-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.rec-subtitle {
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 14px 18px;
+  background: #1a1a24;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+
+.search-box input:focus { border-color: #6c63ff; }
+
+.search-box button {
+  padding: 14px 28px;
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-box button:disabled { opacity: 0.5; }
+
+.no-results {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+}
+
+.uni-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uni-card {
+  background: #1a1a24;
+  border: 1px solid #2a2a3a;
+  border-radius: 16px;
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+
+.uni-card:hover { border-color: #6c63ff44; }
+
+.uni-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.uni-header h3 { font-size: 20px; margin: 0 0 4px; }
+
+.uni-location { color: #888; font-size: 13px; }
+
+.uni-score {
+  background: #6c63ff22;
+  color: #6c63ff;
+  border: 1px solid #6c63ff44;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.uni-desc {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.uni-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  background: #2a2a3a;
+  color: #ccc;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.uni-admission {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.uni-link {
+  color: #6c63ff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.uni-link:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .rec-content { padding: 24px 16px; }
+  h1 { font-size: 24px; }
+  .search-box { flex-direction: column; }
+  .uni-header { flex-direction: column; gap: 8px; }
+}
