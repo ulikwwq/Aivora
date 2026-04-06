@@ -96,10 +96,6 @@ export default function Recommendations() {
               {loading ? '...' : 'Найти'}
             </button>
             <button onClick={handleReset} className="btn-reset">Сбросить</button>
-            // В uni-card добавь кнопку внизу:
-            <button className="ud-detail-btn" onClick={() => navigate(`/university/${uni.name}`)}>
-            📋 Подробнее и план подготовки
-            </button>
           </div>
         </div>
 
@@ -129,6 +125,12 @@ export default function Recommendations() {
               <a href={uni.website} target="_blank" rel="noreferrer" className="uni-link">
                 Официальный сайт →
               </a>
+              <button 
+                className="ud-detail-btn" 
+                onClick={() => navigate(`/university/${encodeURIComponent(uni.name)}`)}
+              >
+                📋 Подробнее и план подготовки
+              </button>
             </div>
           ))}
         </div>
