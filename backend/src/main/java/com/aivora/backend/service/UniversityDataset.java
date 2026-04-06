@@ -225,6 +225,18 @@ public class UniversityDataset {
                         "Один из первых частных университетов КР.", "https://iuk.kg",
                         "ОРТ или внутренние экзамены.", 45),
 
+                new University("Ала-Тоо Университет", "Kyrgyzstan", "Bishkek",
+                        List.of("Computer Science", "Business", "Engineering", "Economics"),
+                        List.of("кыргызстан", "программирование", "бизнес", "инженерия", "экономика", "технологии"),
+                        "Современный частный университет Кыргызстана с сильными IT и бизнес-программами.", "https://alatoo.edu.kg",
+                        "ОРТ или внутренние вступительные экзамены.", 50),
+
+                new University("Инженерный Колледж", "Kyrgyzstan", "Bishkek",
+                        List.of("Engineering", "IT", "Electronics", "Construction"),
+                        List.of("кыргызстан", "инженерия", "технологии", "электроника", "строительство", "колледж"),
+                        "Профессиональное техническое образование по инженерным и IT-специальностям в Кыргызстане.", "https://ic.kg",
+                        "ОРТ или внутренние экзамены по техническим дисциплинам.", 40),
+
                 // 🇺🇿 Узбекистан
                 new University("Webster University Tashkent", "Uzbekistan", "Tashkent",
                         List.of("Business", "Computer Science", "Media", "Psychology"),
