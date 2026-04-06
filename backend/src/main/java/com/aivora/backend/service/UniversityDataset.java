@@ -20,21 +20,6 @@ public class UniversityDataset {
 
     public List<University> getAll() {
         return List.of(
-
-                new University("Инженерный Колледж", "Kyrgyzstan", "Bishkek",
-                        List.of("Engineering", "IT", "Electronics", "Construction"),
-                        List.of("кыргызстан", "инженерия", "технологии", "Дизайн", "колледж", "Кибербезопасность"),
-                        "Профессиональное техническое образование по инженерным и IT-специальностям в Кыргызстане.", "https://college.edu.kg",
-                        "ОРТ или внутренние экзамены по техническим дисциплинам.", 100 ), //40
-
-                new University("Ала-Тоо Университет", "Kyrgyzstan", "Bishkek",
-                        List.of("Computer Science", "Business", "Engineering", "Economics"),
-                        List.of("кыргызстан", "программирование", "бизнес", "инженерия", "экономика", "технологии"),
-                        "Современный частный университет Кыргызстана с сильными IT и бизнес-программами.", "https://alatoo.edu.kg",
-                        "ОРТ или внутренние вступительные экзамены.", 99), //50
-
-
-
                 // 🇺🇸 США
                 new University("MIT", "USA", "Boston",
                         List.of("Computer Science", "AI", "Robotics", "Engineering"),
@@ -204,6 +189,18 @@ public class UniversityDataset {
                         "ЕНТ, внутренние экзамены.", 65),
 
                 // 🇰🇬 Кыргызстан
+                new University("Ала-Тоо Университет", "Kyrgyzstan", "Bishkek",
+                        List.of("Computer Science", "Business", "Engineering", "Economics"),
+                        List.of("кыргызстан", "программирование", "бизнес", "инженерия", "экономика", "технологии"),
+                        "Современный частный университет Кыргызстана с сильными IT и бизнес-программами.", "https://alatoo.edu.kg",
+                        "ОРТ или внутренние вступительные экзамены.", 60), //50
+
+                new University("Инженерный Колледж", "Kyrgyzstan", "Bishkek",
+                        List.of("Engineering", "IT", "Electronics", "Construction"),
+                        List.of("кыргызстан", "инженерия", "технологии", "Дизайн", "колледж", "Кибербезопасность"),
+                        "Профессиональное техническое образование по инженерным и IT-специальностям в Кыргызстане.", "https://college.edu.kg",
+                        "ОРТ или внутренние экзамены по техническим дисциплинам.", 60 ), //40
+
                 new University("АУЦА", "Kyrgyzstan", "Bishkek",
                         List.of("Business", "Computer Science", "Journalism", "Psychology"),
                         List.of("кыргызстан", "бизнес", "программирование", "психология", "журналистика", "английский"),
@@ -239,18 +236,6 @@ public class UniversityDataset {
                         List.of("кыргызстан", "бизнес", "экономика", "право", "туризм"),
                         "Один из первых частных университетов КР.", "https://iuk.kg",
                         "ОРТ или внутренние экзамены.", 45),
-
-                new University("Ала-Тоо Университет", "Kyrgyzstan", "Bishkek",
-                        List.of("Computer Science", "Business", "Engineering", "Economics"),
-                        List.of("кыргызстан", "программирование", "бизнес", "инженерия", "экономика", "технологии"),
-                        "Современный частный университет Кыргызстана с сильными IT и бизнес-программами.", "https://alatoo.edu.kg",
-                        "ОРТ или внутренние вступительные экзамены.", 99), //50
-
-                new University("Инженерный Колледж", "Kyrgyzstan", "Bishkek",
-                        List.of("Engineering", "IT", "Electronics", "Construction"),
-                        List.of("кыргызстан", "инженерия", "технологии", "Дизайн", "колледж", "Кибербезопасность"),
-                        "Профессиональное техническое образование по инженерным и IT-специальностям в Кыргызстане.", "https://college.edu.kg",
-                        "ОРТ или внутренние экзамены по техническим дисциплинам.", 100 ), //40
 
                 // 🇺🇿 Узбекистан
                 new University("Webster University Tashkent", "Uzbekistan", "Tashkent",
