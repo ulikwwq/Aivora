@@ -1,8 +1,8 @@
 package com.aivora.backend.controller;
 
+import com.aivora.backend.dto.RecommendationRequest;
 import com.aivora.backend.service.RecommendationService;
 import com.aivora.backend.service.UniversityDataset;
-import com.aivora.backend.dto.RecommendationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +20,21 @@ public class RecommendationController {
     @PostMapping
     public ResponseEntity<List<UniversityDataset.University>> recommend(
             @RequestBody RecommendationRequest request) {
-        return ResponseEntity.ok(recommendationService.recommend(request.getInterests()));
+        return ResponseEntity.ok(recommendationService.recommend(
+                request.getInterests(),
+                request.getCountry(),
+                request.getSpecialty()
+        ));
     }
 
     @GetMapping
     public ResponseEntity<List<UniversityDataset.University>> getAll() {
         return ResponseEntity.ok(recommendationService.getAll());
+    }
+
+    @GetMapping("/countries")
+    public ResponseEntity<List<String>> getCountries() {
+        return ResponseEntity.ok(recommendationService.getCountries());
     }
 
     @GetMapping("/requirements/{university}")

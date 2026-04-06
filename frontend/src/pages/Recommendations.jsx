@@ -8,21 +8,39 @@ const API_URL = 'https://aivora-backend-l8mv.onrender.com';
 export default function Recommendations() {
   const [universities, setUniversities] = useState([]);
   const [interests, setInterests] = useState('');
+  const [country, setCountry] = useState('');
+  const [specialty, setSpecialty] = useState('');
+  const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!localStorage.getItem('token')) navigate('/login');
+    fetchCountries();
+    fetchAll();
   }, [navigate]);
 
+  const fetchCountries = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/recommendations/countries`);
+      setCountries(res.data);
+    } catch {}
+  };
+
+  const fetchAll = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/recommendations`);
+      setUniversities(res.data);
+    } catch {}
+  };
+
   const handleSearch = async () => {
-    if (!interests.trim()) return;
     setLoading(true);
     setSearched(true);
     try {
       const res = await axios.post(`${API_URL}/recommendations`,
-        { interests },
+        { interests, country, specialty },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
       setUniversities(res.data);
@@ -32,6 +50,16 @@ export default function Recommendations() {
       setLoading(false);
     }
   };
+
+  const handleReset = () => {
+    setInterests('');
+    setCountry('');
+    setSpecialty('');
+    setSearched(false);
+    fetchAll();
+  };
+
+  const specialties = ['Computer Science', 'Business', 'Medicine', 'Engineering', 'Law', 'Economics', 'AI', 'Data Science'];
 
   return (
     <div className="rec-container">
@@ -43,24 +71,36 @@ export default function Recommendations() {
       </div>
 
       <div className="rec-content">
-        <h1>Подбор университетов</h1>
-        <p className="rec-subtitle">Введи свои интересы и мы подберём лучшие университеты</p>
+        <h1>🎓 Подбор университетов</h1>
+        <p className="rec-subtitle">Найди идеальный университет по своим интересам</p>
 
-        <div className="search-box">
+        <div className="filters">
           <input
             type="text"
             value={interests}
             onChange={(e) => setInterests(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Например: программирование, бизнес, медицина..."
+            placeholder="Интересы: программирование, медицина..."
+            className="filter-input"
           />
-          <button onClick={handleSearch} disabled={loading}>
-            {loading ? '...' : 'Найти'}
-          </button>
+          <select value={country} onChange={(e) => setCountry(e.target.value)} className="filter-select">
+            <option value="">🌍 Все страны</option>
+            {countries.map((c, i) => <option key={i} value={c}>{c}</option>)}
+          </select>
+          <select value={specialty} onChange={(e) => setSpecialty(e.target.value)} className="filter-select">
+            <option value="">📚 Все специальности</option>
+            {specialties.map((s, i) => <option key={i} value={s}>{s}</option>)}
+          </select>
+          <div className="filter-buttons">
+            <button onClick={handleSearch} disabled={loading} className="btn-search">
+              {loading ? '...' : 'Найти'}
+            </button>
+            <button onClick={handleReset} className="btn-reset">Сбросить</button>
+          </div>
         </div>
 
         {searched && !loading && universities.length === 0 && (
-          <div className="no-results">Ничего не найдено. Попробуй другие интересы.</div>
+          <div className="no-results">Ничего не найдено. Попробуй другие фильтры.</div>
         )}
 
         <div className="uni-grid">
