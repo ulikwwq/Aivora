@@ -126,9 +126,6 @@ export default function Chat() {
             <span className="brand-text">Aivora</span><span className="brand-dot">.</span>
           </div>
 
-          <div className="header-status">
-            <span className="status-dot"></span>
-          </div>
         </header>
 
         {/* Messages */}
