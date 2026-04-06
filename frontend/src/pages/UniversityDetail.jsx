@@ -131,8 +131,16 @@ export default function UniversityDetail() {
             <a href={uni.website} target="_blank" rel="noreferrer" className="ud-btn-primary">
               Официальный сайт →
             </a>
-            <button className="ud-btn-secondary" onClick={() => navigate('/chat')}>
-              💬 Спросить AI
+            <button className="ud-btn-secondary" onClick={() => {
+                localStorage.setItem('chatContext', JSON.stringify({
+                    university: uni.university,
+                    country: uni.country,
+                    specialties: uni.specialties,
+                    admissionInfo: uni.admissionInfo
+                }));
+                navigate('/chat');
+                }}>
+                💬 Спросить AI
             </button>
           </div>
         </div>
@@ -199,9 +207,17 @@ export default function UniversityDetail() {
             <div className="ud-cta">
               <h3>Нужна персональная помощь?</h3>
               <p>Наш AI советник составит индивидуальный план подготовки именно для тебя</p>
-              <button className="ud-btn-primary" onClick={() => navigate('/chat')}>
-                💬 Начать подготовку с AI
-              </button>
+                <button className="ud-btn-primary" onClick={() => {
+                    localStorage.setItem('chatContext', JSON.stringify({
+                        university: uni.university,
+                        country: uni.country,
+                        specialties: uni.specialties,
+                        admissionInfo: uni.admissionInfo
+                    }));
+                    navigate('/chat');
+                    }}>
+                    💬 Начать подготовку с AI
+                </button>
             </div>
           </div>
         )}

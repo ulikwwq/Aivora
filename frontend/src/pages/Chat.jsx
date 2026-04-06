@@ -4,9 +4,21 @@ import { sendMessage, resetChat } from '../services/api';
 import './Chat.css';
 
 export default function Chat() {
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Привет! Я Aivora — твой AI советник по университетам. Расскажи мне о себе — чем ты интересуешься?' }
-  ]);
+  const [messages, setMessages] = useState(() => {
+    const context = localStorage.getItem('chatContext');
+    if (context) {
+      const uni = JSON.parse(context);
+      localStorage.removeItem('chatContext');
+      return [{
+        role: 'assistant',
+        content: `Привет! Я вижу что тебя интересует **${uni.university}** (${uni.country}) 🎓\n\nЯ помогу тебе подготовиться к поступлению! Специальности: ${uni.specialties.join(', ')}.\n\nС чего начнём?\n1️⃣ Составить план подготовки\n2️⃣ Узнать про требования и тесты\n3️⃣ Подобрать учебные материалы`
+      }];
+    }
+    return [{
+      role: 'assistant',
+      content: 'Привет! Я Aivora — твой AI советник по университетам. Расскажи мне о себе — чем ты интересуешься?'
+    }];
+  });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,7 +43,9 @@ export default function Chat() {
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setLoading(true);
     try {
-      const res = await sendMessage(userMsg);
+      const uniContext = localStorage.getItem('pendingUniContext');
+      if (uniContext) localStorage.removeItem('pendingUniContext');
+      const res = await sendMessage(userMsg, uniContext);
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }]);
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Ошибка соединения. Попробуй снова.' }]);

@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
 
 export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
-export const sendMessage = (message) => api.post('/chat', { message });
-export const resetChat = () => api.delete('/chat/reset');
+export const sendMessage = (message, uniContext = null) => 
+  api.post('/chat', { message, uniContext });export const resetChat = () => api.delete('/chat/reset');
 
 export default api;

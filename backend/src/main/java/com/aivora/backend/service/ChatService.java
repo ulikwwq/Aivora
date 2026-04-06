@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,24 +26,43 @@ public class ChatService {
             .build();
 
     private static final String SYSTEM_PROMPT = """
-            Ты — Aivora, AI университетский советник. Твоя задача — помочь пользователю выбрать подходящую специальность и университет.
+            Ты — Aivora, AI университетский советник. Твоя задача — помочь пользователю выбрать подходящую специальность и университет, а также помочь подготовиться к поступлению.
             
             Веди диалог по следующему плану:
             1. Сначала узнай интересы пользователя (что ему нравится, чем занимается)
             2. Узнай его цели (кем хочет стать, какой доход ожидает)
             3. Узнай его навыки и сильные стороны
             4. На основе собранных данных порекомендуй 2-3 подходящие специальности и университеты
+            5. Помоги составить план подготовки к поступлению
+            
+            Если пользователь уже выбрал университет — помоги ему подготовиться:
+            - Расскажи какие тесты нужно сдать
+            - Составь план подготовки по месяцам
+            - Порекомендуй учебные материалы и курсы
+            - Помоги улучшить нужные навыки
             
             Общайся дружелюбно, задавай по одному вопросу за раз.
             Отвечай на том языке, на котором пишет пользователь.
             """;
 
-    public ChatResponse chat(List<Map<String, String>> history, String userMessage) {
+    public ChatResponse chat(List<Map<String, String>> history, String userMessage, String uniContext) {
+
         history.add(Map.of("role", "user", "content", userMessage));
 
         var messages = new ArrayList<Map<String, String>>();
-        messages.add(Map.of("role", "system", "content", SYSTEM_PROMPT));
-        messages.addAll(history);
+
+        // Если есть контекст университета — добавляем его в system prompt
+        String finalSystemPrompt = SYSTEM_PROMPT;
+        if (uniContext != null && !uniContext.isEmpty()) {
+            finalSystemPrompt = SYSTEM_PROMPT + "\n\nВАЖНО: Пользователь уже выбрал университет и хочет подготовиться к поступлению. Контекст: " + uniContext + "\nПомоги ему конкретно с подготовкой к этому университету.";
+        }
+
+        messages.add(Map.of("role", "system", "content", finalSystemPrompt));
+
+        // Добавляем историю (фильтруем системные сообщения)
+        messages.addAll(history.stream()
+                .filter(m -> !m.getOrDefault("role", "").equals("system-context"))
+                .collect(Collectors.toList()));
 
         var requestBody = Map.of(
                 "model", model,

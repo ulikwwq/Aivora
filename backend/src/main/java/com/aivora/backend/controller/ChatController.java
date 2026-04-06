@@ -30,7 +30,11 @@ public class ChatController {
         sessions.putIfAbsent(sessionKey, new ArrayList<>());
         List<Map<String, String>> history = sessions.get(sessionKey);
 
-        ChatResponse response = chatService.chat(history, request.getMessage());
+        ChatResponse response = chatService.chat(
+                history,
+                request.getMessage(),
+                request.getUniContext()
+        );
         return ResponseEntity.ok(response);
     }
 
