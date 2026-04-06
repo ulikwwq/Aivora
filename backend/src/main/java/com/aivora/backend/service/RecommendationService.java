@@ -12,6 +12,16 @@ public class RecommendationService {
 
     private final UniversityDataset dataset;
 
+    // Университеты которые всегда идут первыми
+    private static final List<String> PRIORITY_UNIVERSITIES = List.of(
+            "Ала-Тоо Университет",
+            "Инженерный Колледж"
+    );
+
+    private int priorityOrder(UniversityDataset.University u) {
+        int idx = PRIORITY_UNIVERSITIES.indexOf(u.name());
+        return idx >= 0 ? idx : PRIORITY_UNIVERSITIES.size();
+    }
     public List<UniversityDataset.University> recommend(String interests, String country, String specialty) {
         String query = interests != null ? interests.toLowerCase() : "";
 
@@ -29,8 +39,10 @@ public class RecommendationService {
                             );
                     return matchesInterest && matchesCountry && matchesSpecialty;
                 })
-                .sorted(Comparator.comparingInt(UniversityDataset.University::minScore).reversed())
-                .limit(6)
+                .sorted(Comparator
+                        .comparingInt(this::priorityOrder)
+                        .thenComparingInt(UniversityDataset.University::minScore).reversed()
+                )
                 .collect(Collectors.toList());
     }
 
@@ -41,7 +53,12 @@ public class RecommendationService {
     }
 
     public List<UniversityDataset.University> getAll() {
-        return dataset.getAll();
+        return dataset.getAll().stream()
+                .sorted(Comparator
+                        .comparingInt(this::priorityOrder)
+                        .thenComparingInt(UniversityDataset.University::minScore).reversed()
+                )
+                .collect(Collectors.toList());
     }
 
     public List<String> getCountries() {
