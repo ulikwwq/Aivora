@@ -115,6 +115,11 @@ export default function Chat() {
             <span className="nav-icon">🎓</span>
             Университеты
           </button>
+          {/* Кнопка "Обучение" в сайдбаре (как в примере) */}
+          <button className="nav-item" onClick={() => { navigate('/learning'); setSidebarOpen(false); }}>
+            <span className="nav-icon">📚</span>
+            Обучение
+          </button>
         </nav>
 
         <div className="sidebar-bottom">
@@ -136,10 +141,14 @@ export default function Chat() {
             <span className="burger-line"></span>
           </button>
 
+          {/* Мобильная кнопка "Обучение" (видна только на маленьких экранах) */}
+          <button className="mobile-learning-btn" onClick={() => navigate('/learning')}>
+            📚
+          </button>
+
           <div className="header-logo">
             <span className="brand-text">Aivora</span><span className="brand-dot">.</span>
           </div>
-
         </header>
 
         {/* Messages */}

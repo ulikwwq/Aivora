@@ -4,6 +4,8 @@ import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Recommendations from './pages/Recommendations';
 import UniversityDetail from './pages/UniversityDetail';
+import Learning from './pages/Learning';
+
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" />;
@@ -19,6 +21,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/recommendations" element={<PrivateRoute><Recommendations /></PrivateRoute>} />
         <Route path="/university/:name" element={<PrivateRoute><UniversityDetail /></PrivateRoute>} />
+        <Route path="/learning" element={<PrivateRoute><Learning /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );
