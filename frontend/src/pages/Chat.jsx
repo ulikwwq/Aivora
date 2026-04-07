@@ -142,9 +142,9 @@ export default function Chat() {
           </button>
 
           {/* Мобильная кнопка "Обучение" (видна только на маленьких экранах) */}
-          <button className="mobile-learning-btn" onClick={() => navigate('/learning')}>
+          {/* <button className="mobile-learning-btn" onClick={() => navigate('/learning')}>
             📚
-          </button>
+          </button> */}
 
           <div className="header-logo">
             <span className="brand-text">Aivora</span><span className="brand-dot">.</span>
