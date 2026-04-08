@@ -14,18 +14,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth endpoints
 export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
-
-// Chat endpoints
-export const sendMessage = (message, uniContext = null) =>
-  api.post('/chat', { message, uniContext });
-export const resetChat = () => api.delete('/chat/reset');
-
-// History endpoints (требуют JWT)
-export const getHistory = () => api.get('/history');
-export const saveSession = (data) => api.post('/history/save', data);
-export const deleteSession = (id) => api.delete(`/history/${id}`);
+export const sendMessage = (message, uniContext = null) => 
+  api.post('/chat', { message, uniContext });export const resetChat = () => api.delete('/chat/reset');
 
 export default api;

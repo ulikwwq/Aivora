@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sendMessage, resetChat, saveSession, getHistory, deleteSession } from '../services/api';
+import { sendMessage, resetChat } from '../services/api';
 import './Chat.css';
 
 export default function Chat() {
@@ -21,67 +21,32 @@ export default function Chat() {
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);     // переименовано из sidebarOpen
-  const [sessionId, setSessionId] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
   const name = localStorage.getItem('name') || 'Пользователь';
 
-  // Проверка авторизации и загрузка истории при монтировании
   useEffect(() => {
     if (!localStorage.getItem('token')) navigate('/login');
-    loadHistory();
   }, [navigate]);
 
-  // Загрузка списка сессий с сервера
-  const loadHistory = async () => {
-    try {
-      const res = await getHistory();
-      setHistory(res.data);
-    } catch (err) {
-      console.error('Ошибка загрузки истории:', err);
-    }
-  };
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-  // Открытие сохранённого чата
-  const openSession = (session) => {
-    try {
-      // Если messages приходит как строка JSON, парсим, иначе используем как есть
-      const msgs = typeof session.messages === 'string' 
-        ? JSON.parse(session.messages) 
-        : session.messages;
-      setMessages(msgs);
-      setSessionId(session.id);
-      setHistoryOpen(false);
-      setMenuOpen(false);
-    } catch (err) {
-      console.error('Ошибка загрузки сессии:', err);
-    }
-  };
-
-  // Отправка сообщения
   const handleSend = async () => {
     if (!input.trim() || loading) return;
     const userMsg = input.trim();
     setInput('');
-    // Оптимистичное обновление: добавляем сообщение пользователя
-    const newMessages = [...messages, { role: 'user', content: userMsg }];
-    setMessages(newMessages);
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
+    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setLoading(true);
     try {
       const uniContext = localStorage.getItem('pendingUniContext');
       if (uniContext) localStorage.removeItem('pendingUniContext');
       const res = await sendMessage(userMsg, uniContext);
-      const finalMessages = [...newMessages, { role: 'assistant', content: res.data.reply }];
-      setMessages(finalMessages);
-      // Автосохранение после получения ответа AI
-      const title = newMessages.find(m => m.role === 'user')?.content?.slice(0, 40) || 'Новый чат';
-      const saveRes = await saveSession({ sessionId, title, messages: finalMessages });
-      if (!sessionId) setSessionId(saveRes.data.id);
-      await loadHistory(); // обновляем боковую панель истории
+      setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }]);
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Ошибка соединения. Попробуй снова.' }]);
     } finally {
@@ -89,25 +54,6 @@ export default function Chat() {
     }
   };
 
-  // Сброс текущего диалога (новый чат)
-  const handleReset = async () => {
-    await resetChat();
-    setSessionId(null);
-    setMessages([{
-      role: 'assistant',
-      content: 'Привет! Я Aivora — твой AI советник по университетам. Расскажи мне о себе — чем ты интересуешься?'
-    }]);
-    setMenuOpen(false);
-    setHistoryOpen(false);
-  };
-
-  // Выход из аккаунта
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
-
-  // Обработчики ввода
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -122,25 +68,34 @@ export default function Chat() {
     ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
   };
 
-  // Автоскролл
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  const handleReset = async () => {
+    await resetChat();
+    setMessages([
+      { role: 'assistant', content: 'Привет! Я Aivora — твой AI советник по университетам. Расскажи мне о себе — чем ты интересуешься?' }
+    ]);
+    setSidebarOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
     <div className="chat-root">
-      {/* Оверлей для бокового меню */}
-      {menuOpen && (
-        <div className="sidebar-overlay" onClick={() => setMenuOpen(false)} />
+
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Боковое меню (sidebar) */}
-      <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-top">
           <div className="sidebar-brand">
             <span className="brand-text">Aivora</span><span className="brand-dot">.</span>
           </div>
-          <button className="sidebar-close" onClick={() => setMenuOpen(false)}>✕</button>
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>✕</button>
         </div>
 
         <div className="sidebar-user-card">
@@ -156,17 +111,14 @@ export default function Chat() {
             <span className="nav-icon">✦</span>
             Новый диалог
           </button>
-          <button className="nav-item" onClick={() => { navigate('/recommendations'); setMenuOpen(false); }}>
+          <button className="nav-item" onClick={() => { navigate('/recommendations'); setSidebarOpen(false); }}>
             <span className="nav-icon">🎓</span>
             Университеты
           </button>
-          <button className="nav-item" onClick={() => { navigate('/learning'); setMenuOpen(false); }}>
+          {/* Кнопка "Обучение" в сайдбаре (как в примере) */}
+          <button className="nav-item" onClick={() => { navigate('/learning'); setSidebarOpen(false); }}>
             <span className="nav-icon">📚</span>
             Обучение
-          </button>
-          <button className="nav-item" onClick={() => setHistoryOpen(!historyOpen)}>
-            <span className="nav-icon">🕐</span>
-            История чатов
           </button>
         </nav>
 
@@ -178,58 +130,28 @@ export default function Chat() {
         </div>
       </aside>
 
-      {/* Панель истории (отдельный слой) */}
-      {historyOpen && (
-        <>
-          <div className="history-overlay" onClick={() => setHistoryOpen(false)} />
-          <div className="history-panel">
-            <div className="history-header">
-              <h3>История чатов</h3>
-              <button onClick={() => setHistoryOpen(false)}>✕</button>
-            </div>
-            <div className="history-list">
-              {history.length === 0 && (
-                <p className="history-empty">Нет сохранённых чатов</p>
-              )}
-              {history.map((s) => (
-                <div key={s.id} className="history-item" onClick={() => openSession(s)}>
-                  <div className="history-item-content">
-                    <span className="history-title">{s.title}</span>
-                    <span className="history-date">
-                      {new Date(s.updatedAt).toLocaleDateString('ru-RU')}
-                    </span>
-                  </div>
-                  <button
-                    className="history-delete"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      await deleteSession(s.id);
-                      await loadHistory();
-                      if (sessionId === s.id) handleReset(); // если удалили текущий чат, сбросим
-                    }}
-                  >
-                    🗑️
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Основная область чата */}
+      {/* Main */}
       <div className="chat-main">
+
+        {/* Header */}
         <header className="chat-header">
-          <button className="header-btn" onClick={() => setMenuOpen(true)}>
+          <button className="header-btn" onClick={() => setSidebarOpen(true)}>
             <span className="burger-line"></span>
             <span className="burger-line"></span>
             <span className="burger-line"></span>
           </button>
+
+          {/* Мобильная кнопка "Обучение" (видна только на маленьких экранах) */}
+          {/* <button className="mobile-learning-btn" onClick={() => navigate('/learning')}>
+            📚
+          </button> */}
+
           <div className="header-logo">
             <span className="brand-text">Aivora</span><span className="brand-dot">.</span>
           </div>
         </header>
 
+        {/* Messages */}
         <div className="messages-area">
           {messages.map((msg, i) => (
             <div key={i} className={`msg-row ${msg.role}`}>
@@ -250,6 +172,7 @@ export default function Chat() {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Input */}
         <div className="input-bar">
           <div className="input-pill">
             <textarea
