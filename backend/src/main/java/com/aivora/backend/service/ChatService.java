@@ -1,6 +1,7 @@
 package com.aivora.backend.service;
 
 import com.aivora.backend.dto.ChatResponse;
+import com.aivora.backend.service.factory.AiResponseFactory;   // ← добавлен импорт
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class ChatService {
     private final WebClient webClient = WebClient.builder()
             .baseUrl("https://api.groq.com")
             .build();
+
+    private final AiResponseFactory responseFactory;
 
     private static final String SYSTEM_PROMPT = """
             Ты — Aivora, AI университетский советник. Твоя задача — помочь пользователю выбрать подходящую специальность и университет, а также помочь подготовиться к поступлению.
@@ -85,6 +88,6 @@ public class ChatService {
 
         history.add(Map.of("role", "assistant", "content", reply));
 
-        return new ChatResponse(reply);
+        return responseFactory.createResponse(reply);
     }
 }

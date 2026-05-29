@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;   // ← заменили на jakarta
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatController {
 
     private final ChatService chatService;
-
     private final Map<String, List<Map<String, String>>> sessions = new ConcurrentHashMap<>();
 
     @PostMapping
     public ResponseEntity<ChatResponse> chat(
             @RequestHeader("Authorization") String authHeader,
-            @RequestBody ChatRequest request) {
+            @Valid @RequestBody ChatRequest request) {
 
         String sessionKey = authHeader.replace("Bearer ", "");
         sessions.putIfAbsent(sessionKey, new ArrayList<>());

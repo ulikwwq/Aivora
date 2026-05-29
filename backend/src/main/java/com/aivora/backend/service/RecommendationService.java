@@ -1,5 +1,7 @@
 package com.aivora.backend.service;
 
+import com.aivora.backend.exception.ResourceNotFoundException;
+import com.aivora.backend.service.strategy.RecommendationStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,38 +13,30 @@ import java.util.stream.Collectors;
 public class RecommendationService {
 
     private final UniversityDataset dataset;
+    private final Map<String, RecommendationStrategy> strategies;
 
-    // Университеты которые всегда идут первыми
-    private static final List<String> PRIORITY_UNIVERSITIES = List.of(
-            "Ала-Тоо Университет",
-            "Инженерный Колледж"
-    );
+    public List<UniversityDataset.University> recommend(
+            String interests, String country, String specialty) {
 
-    private int priorityOrder(UniversityDataset.University u) {
-        int idx = PRIORITY_UNIVERSITIES.indexOf(u.name());
-        return idx >= 0 ? idx : PRIORITY_UNIVERSITIES.size();
-    }
-    public List<UniversityDataset.University> recommend(String interests, String country, String specialty) {
-        String query = interests != null ? interests.toLowerCase() : "";
+        List<UniversityDataset.University> result = dataset.getAll();
 
-        return dataset.getAll().stream()
-                .filter(u -> {
-                    boolean matchesInterest = query.isEmpty() ||
-                            u.tags().stream().anyMatch(tag ->
-                                    query.contains(tag) || tag.contains(query.split(" ")[0])
-                            );
-                    boolean matchesCountry = country == null || country.isEmpty() ||
-                            u.country().equalsIgnoreCase(country);
-                    boolean matchesSpecialty = specialty == null || specialty.isEmpty() ||
-                            u.specialties().stream().anyMatch(s ->
-                                    s.toLowerCase().contains(specialty.toLowerCase())
-                            );
-                    return matchesInterest && matchesCountry && matchesSpecialty;
-                })
-                .sorted(Comparator
-                        .comparingInt(this::priorityOrder)
-                        .thenComparingInt(UniversityDataset.University::minScore).reversed()
-                )
+        // Strategy Pattern — применяем нужную стратегию
+        if (interests != null && !interests.isEmpty()) {
+            result = strategies.get("byInterest").recommend(result, interests);
+        }
+        if (country != null && !country.isEmpty()) {
+            result = strategies.get("byCountry").recommend(result, country);
+        }
+        if (specialty != null && !specialty.isEmpty()) {
+            result = result.stream()
+                    .filter(u -> u.specialties().stream()
+                            .anyMatch(s -> s.toLowerCase().contains(specialty.toLowerCase())))
+                    .collect(Collectors.toList());
+        }
+
+        return result.stream()
+                .sorted(Comparator.comparingInt(
+                        UniversityDataset.University::minScore).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -53,12 +47,7 @@ public class RecommendationService {
     }
 
     public List<UniversityDataset.University> getAll() {
-        return dataset.getAll().stream()
-                .sorted(Comparator
-                        .comparingInt(this::priorityOrder)
-                        .thenComparingInt(UniversityDataset.University::minScore).reversed()
-                )
-                .collect(Collectors.toList());
+        return dataset.getAll();
     }
 
     public List<String> getCountries() {

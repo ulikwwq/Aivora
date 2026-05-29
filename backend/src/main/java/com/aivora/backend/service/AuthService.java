@@ -7,6 +7,8 @@ import com.aivora.backend.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.aivora.backend.exception.BadRequestException;
+import com.aivora.backend.exception.ResourceNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already in use");
+            throw new BadRequestException("Email уже используется: " + request.getEmail());
         }
 
         User user = User.builder()
@@ -35,10 +37,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadRequestException("Неверный пароль");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
