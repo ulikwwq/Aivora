@@ -1,0 +1,22 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/recommendations/requirements/TU Munich"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: >-
+      {
+        "name": "TU Munich",
+        "country": "Germany",
+        "city": "Munich",
+        "specialties": ["Computer Science", "Engineering", "Natural Sciences"],
+        "tags": ["technical", "research", "stem"],
+        "description": "Top technical university in Germany, consistently ranked among Europe's best.",
+        "website": "https://www.tum.de",
+        "admissionInfo": "Apply via uni-assist, German or English language required",
+        "minScore": 85
+      }
+order: 1000

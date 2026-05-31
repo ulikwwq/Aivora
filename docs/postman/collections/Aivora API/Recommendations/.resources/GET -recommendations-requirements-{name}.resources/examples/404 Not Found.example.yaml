@@ -1,0 +1,14 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/recommendations/requirements/TU Munich"
+  method: GET
+response:
+  statusCode: 404
+  statusText: Not Found
+  body:
+    type: text
+    content: |-
+      {
+        "error": "University not found: TU Munich"
+      }
+order: 2000

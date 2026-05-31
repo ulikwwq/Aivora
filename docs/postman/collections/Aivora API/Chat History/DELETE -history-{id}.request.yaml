@@ -1,0 +1,10 @@
+$kind: http-request
+name: DELETE /history/{id}
+description: Delete a saved chat session by ID. Only the owner (matched by JWT
+  email) can delete their own sessions.
+url: "{{baseUrl}}/history/1"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/DELETE -history-{id}.resources/examples
+order: 3000

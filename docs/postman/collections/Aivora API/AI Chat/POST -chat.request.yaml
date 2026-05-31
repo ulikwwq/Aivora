@@ -1,0 +1,24 @@
+$kind: http-request
+name: POST /chat
+description: >-
+  Send a message to the AI advisor. Maintains conversation history within the
+  session.
+
+
+  uniContext (optional): Pass a university name when coming from the
+  UniversityDetail page. The AI will be pre-informed about that university in
+  its first response.
+url: "{{baseUrl}}/chat"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "message": "What universities are good for computer science in Germany?",
+      "uniContext": null
+    }
+examples: ./.resources/POST -chat.resources/examples
+order: 1000

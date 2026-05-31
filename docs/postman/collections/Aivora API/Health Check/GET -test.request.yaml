@@ -1,0 +1,8 @@
+$kind: http-request
+name: GET /test
+description: Health check endpoint. Also use this to wake up the Render server
+  before a demo (first request after sleep takes ~50 seconds).
+url: "{{baseUrl}}/test"
+method: GET
+examples: ./.resources/GET -test.resources/examples
+order: 1000

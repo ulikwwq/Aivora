@@ -1,0 +1,33 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/recommendations"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: text
+    content: |-
+      {
+        "interests": "computer science",
+        "country": "Germany",
+        "specialty": "software engineering"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      [
+        {
+          "name": "TU Munich",
+          "country": "Germany",
+          "city": "Munich",
+          "specialties": ["Computer Science", "Engineering"],
+          "description": "Top technical university in Germany",
+          "website": "https://www.tum.de",
+          "minScore": 85
+        }
+      ]
+order: 1000

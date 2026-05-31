@@ -1,0 +1,13 @@
+$kind: http-request
+name: GET /recommendations/requirements/{name}
+description: >-
+  Get full details of a specific university by name. Used by the
+  UniversityDetail page.
+
+
+  Returns: name, country, city, specialties, tags, description, website,
+  admissionInfo, minScore.
+url: "{{baseUrl}}/recommendations/requirements/TU Munich"
+method: GET
+examples: ./.resources/GET -recommendations-requirements-{name}.resources/examples
+order: 4000

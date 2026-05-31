@@ -1,0 +1,18 @@
+$kind: http-request
+name: POST /favorites
+description: Add a university to the authenticated user's favorites list.
+url: "{{baseUrl}}/favorites"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "universityName": "TU Munich",
+      "country": "Germany",
+      "city": "Munich"
+    }
+examples: ./.resources/POST -favorites.resources/examples
+order: 2000

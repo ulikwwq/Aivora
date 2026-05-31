@@ -1,0 +1,9 @@
+$kind: http-request
+name: GET /history
+description: Get all saved chat sessions for the authenticated user, ordered by most recent.
+url: "{{baseUrl}}/history"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/GET -history.resources/examples
+order: 1000

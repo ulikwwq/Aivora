@@ -1,0 +1,12 @@
+$kind: collection
+description: |-
+  Complete API collection for Aivora — AI University Advisor
+  Backend: https://aivora-backend-l8mv.onrender.com
+
+  Usage:
+  1. Run POST /auth/login to get a token
+  2. Set the token in the 'token' collection variable
+  3. All JWT-protected requests will use it automatically
+variables:
+  baseUrl: https://aivora-backend-l8mv.onrender.com
+  token: ""

@@ -1,0 +1,30 @@
+$kind: http-request
+name: POST /auth/login
+description: >-
+  Login with email and password. Returns JWT token.
+
+
+  The test script automatically saves the token to the {{token}} collection
+  variable, so all subsequent JWT-protected requests work immediately.
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "aibek@example.com",
+      "password": "securepassword"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      var json = pm.response.json();
+      if (json.token) {
+          pm.collectionVariables.set('token', json.token);
+          console.log('Token saved to collection variable');
+      }
+    language: text/javascript
+examples: ./.resources/POST -auth-login.resources/examples
+order: 2000

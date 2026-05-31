@@ -1,0 +1,23 @@
+$kind: http-request
+name: POST /auth/register
+description: |-
+  Register a new user. Returns JWT token on success.
+
+  Validation rules:
+  - name: required, not blank
+  - email: required, valid email format
+  - password: required, min 6 characters
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Aibek Umarov",
+      "email": "aibek@example.com",
+      "password": "securepassword"
+    }
+examples: ./.resources/POST -auth-register.resources/examples
+order: 1000

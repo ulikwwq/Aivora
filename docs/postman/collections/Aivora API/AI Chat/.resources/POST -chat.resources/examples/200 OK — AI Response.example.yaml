@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/chat"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: text
+    content: >-
+      {
+        "message": "What universities are good for computer science in Germany?",
+        "uniContext": null
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: >-
+      {
+        "response": "Great choice! For computer science in Germany, I'd recommend TU Munich and Heidelberg University. TU Munich is consistently ranked among the top technical universities in Europe..."
+      }
+order: 1000

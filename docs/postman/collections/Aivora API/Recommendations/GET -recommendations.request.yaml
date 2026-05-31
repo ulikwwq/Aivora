@@ -1,0 +1,12 @@
+$kind: http-request
+name: GET /recommendations
+description: >-
+  Get all universities in the dataset (32+). Public endpoint — no authentication
+  required.
+
+
+  Kyrgyz universities (Ala-Too, Engineering College) appear first as priority
+  partners.
+url: "{{baseUrl}}/recommendations"
+method: GET
+order: 1000

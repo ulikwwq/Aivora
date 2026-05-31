@@ -1,0 +1,25 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "email": "aibek@example.com",
+        "password": "securepassword"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "token": "eyJhbGciOiJIUzI1NiJ9...",
+        "name": "Aibek Umarov",
+        "email": "aibek@example.com"
+      }
+order: 1000

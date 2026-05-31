@@ -1,0 +1,24 @@
+$kind: http-request
+name: POST /recommendations (filter)
+description: |-
+  Filter universities using the Strategy Pattern. All fields are optional:
+  - interests: filters by tags/specialties (ByInterestStrategy)
+  - country: filters by country name (ByCountryStrategy)
+  - specialty: filters by specialty name (ByScoreStrategy)
+
+  Combine filters for more precise results.
+url: "{{baseUrl}}/recommendations"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "interests": "computer science",
+      "country": "Germany",
+      "specialty": "software engineering"
+    }
+examples: ./.resources/POST -recommendations (filter).resources/examples
+order: 2000

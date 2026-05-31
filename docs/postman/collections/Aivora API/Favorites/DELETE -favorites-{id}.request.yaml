@@ -1,0 +1,9 @@
+$kind: http-request
+name: DELETE /favorites/{id}
+description: Remove a university from favorites by ID.
+url: "{{baseUrl}}/favorites/1"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/DELETE -favorites-{id}.resources/examples
+order: 3000

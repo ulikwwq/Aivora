@@ -1,0 +1,8 @@
+$kind: http-request
+name: GET /recommendations/countries
+description: Get distinct list of countries available in the university dataset.
+  Used to populate the country filter dropdown on the Recommendations page.
+url: "{{baseUrl}}/recommendations/countries"
+method: GET
+examples: ./.resources/GET -recommendations-countries.resources/examples
+order: 3000

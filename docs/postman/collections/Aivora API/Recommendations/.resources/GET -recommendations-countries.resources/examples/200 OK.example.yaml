@@ -1,0 +1,13 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/recommendations/countries"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: '["USA", "UK", "Germany", "Canada", "Singapore", "Japan", "Kyrgyzstan",
+      "Kazakhstan", "Russia", "Netherlands", "Australia", "Switzerland", "South
+      Korea", "Uzbekistan"]'
+order: 1000

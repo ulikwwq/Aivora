@@ -1,0 +1,10 @@
+$kind: http-request
+name: DELETE /chat/reset
+description: Reset the current conversation session. The AI will lose memory of
+  the previous conversation. Used when starting a 'New Chat'.
+url: "{{baseUrl}}/chat/reset"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/DELETE -chat-reset.resources/examples
+order: 3000

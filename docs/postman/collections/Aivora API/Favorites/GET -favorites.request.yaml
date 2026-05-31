@@ -1,0 +1,9 @@
+$kind: http-request
+name: GET /favorites
+description: Get all universities saved as favorites by the authenticated user.
+url: "{{baseUrl}}/favorites"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/GET -favorites.resources/examples
+order: 1000

@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/favorites"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: text
+    content: |-
+      {
+        "universityName": "TU Munich",
+        "country": "Germany",
+        "city": "Munich"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "id": 1,
+        "universityName": "TU Munich",
+        "country": "Germany",
+        "city": "Munich",
+        "savedAt": "2026-05-31T10:00:00"
+      }
+order: 1000

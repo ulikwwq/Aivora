@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "name": "Aibek Umarov",
+        "email": "aibek@example.com",
+        "password": "securepassword"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  body:
+    type: text
+    content: |-
+      {
+        "error": "Email already registered"
+      }
+order: 2000

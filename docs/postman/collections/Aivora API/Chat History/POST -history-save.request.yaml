@@ -1,0 +1,17 @@
+$kind: http-request
+name: POST /history/save
+description: Save a chat session to the database. Called automatically by the
+  frontend after each AI response.
+url: "{{baseUrl}}/history/save"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: >-
+    {
+      "title": "What universities are good for CS?",
+      "messages": "[{\"role\":\"user\",\"content\":\"What universities are good for CS?\"},{\"role\":\"assistant\",\"content\":\"Great question!\"}]"
+    }
+order: 2000
