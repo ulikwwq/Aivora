@@ -80,10 +80,15 @@ export default function UniversityDetail() {
   const [uni, setUni] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  // Добавленные состояния для избранного
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favId, setFavId] = useState(null);
+  const [favLoading, setFavLoading] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem('token')) navigate('/login');
     fetchUniversity();
+    fetchFavorites(); // Загружаем избранное
   }, [name]);
 
   const fetchUniversity = async () => {
@@ -95,6 +100,50 @@ export default function UniversityDetail() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Функция загрузки списка избранного
+  const fetchFavorites = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/favorites`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const found = res.data.find(f => f.universityName === decodeURIComponent(name));
+      if (found) {
+        setIsFavorite(true);
+        setFavId(found.id);
+      }
+    } catch (error) {
+      // Ошибка загрузки избранного — просто игнорируем
+    }
+  };
+
+  // Переключение статуса избранного
+  const toggleFavorite = async () => {
+    if (!uni) return;
+    setFavLoading(true);
+    const token = localStorage.getItem('token');
+    try {
+      if (isFavorite) {
+        await axios.delete(`${API_URL}/favorites/${favId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setIsFavorite(false);
+        setFavId(null);
+      } else {
+        const res = await axios.post(`${API_URL}/favorites`, {
+          universityName: uni.university,
+          country: uni.country,
+          city: uni.city
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        setIsFavorite(true);
+        setFavId(res.data.id);
+      }
+    } catch (error) {
+      // Ошибка — ничего не делаем
+    }
+    setFavLoading(false);
   };
 
   if (loading) return (
@@ -141,6 +190,14 @@ export default function UniversityDetail() {
                 navigate('/chat');
                 }}>
                 💬 Спросить AI
+            </button>
+            {/* Кнопка добавления в избранное */}
+            <button
+              className={`ud-btn-favorite ${isFavorite ? 'active' : ''}`}
+              onClick={toggleFavorite}
+              disabled={favLoading}
+            >
+              {favLoading ? '...' : isFavorite ? '★ В избранном' : '☆ В избранное'}
             </button>
           </div>
         </div>

@@ -337,3 +337,32 @@
   .ud-cards-grid { grid-template-columns: 1fr; }
   .ud-header { padding: 12px 16px; }
 }
+
+/* Кнопка избранного */
+.ud-btn-favorite {
+  padding: 12px 24px;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ud-btn-favorite:hover {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.ud-btn-favorite.active {
+  background: #f59e0b22;
+  color: #f59e0b;
+  border-color: #f59e0b66;
+}
+
+.ud-btn-favorite:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
